@@ -26,7 +26,10 @@ export const Router: FC = () => {
           headerShown: false,
         }}
       >
-        <Stack.Screen name="Tasks" component={Tasks} />
+        <Stack.Screen 
+          name="Tasks" 
+          component={Tasks} 
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

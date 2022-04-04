@@ -11,12 +11,17 @@ interface IGlobalContextProps {
   isDarkMode: boolean;
   isShowedMenu: boolean;
   isExpandedInput: boolean;
+  currentScreen: string;
   onChangeTheme(status: boolean): void;
   onHideMenu(): void;
   onShowMenu(): void;
   onExpandedSearchInput(): void;
   onRetractedSearchInput(): void;
+  changeBackgroundColorNavigation(color: string): Promise<void>;
+  onChangeCurrentScreen(screen: ICurrentScreen): void;
 }
+
+type ICurrentScreen = "Tasks" | "Trash" | "Favorit";
 
 export const GlobalContext = createContext({} as IGlobalContextProps);
 
@@ -24,6 +29,7 @@ export const GlobalProvider: FC = ({ children }) => {
   const [isShowedMenu, setIsShowedMenu] = useState<boolean>(false);
   const [isDarkMode, setIsDarkMode] = useState<boolean>(true);
   const [isExpandedInput, setIsExpandedInput] = useState<boolean>(false);
+  const [currentScreen, setCurrentScreen] = useState<ICurrentScreen>("Tasks");
 
   function onChangeTheme(status: boolean) {
     // setIsDarkMode(status);
@@ -46,13 +52,13 @@ export const GlobalProvider: FC = ({ children }) => {
     setIsExpandedInput(false);
   }
 
-  useEffect(() => {
-    async function changeBackgroundColorNavigation() {
-      await setBackgroundColorAsync("#3C3939");
-    }
+  function onChangeCurrentScreen(screen: ICurrentScreen) {
+    setCurrentScreen(screen);
+  }
 
-    changeBackgroundColorNavigation();
-  }, []);
+  async function changeBackgroundColorNavigation(color: string = "#3C3939") {
+    await setBackgroundColorAsync(color);
+  }
 
   return (
     <GlobalContext.Provider
@@ -60,11 +66,14 @@ export const GlobalProvider: FC = ({ children }) => {
         isDarkMode,
         isShowedMenu,
         isExpandedInput,
+        currentScreen,
         onChangeTheme,
         onHideMenu,
         onShowMenu,
         onExpandedSearchInput,
-        onRetractedSearchInput
+        onRetractedSearchInput,
+        changeBackgroundColorNavigation,
+        onChangeCurrentScreen
       }}
     >
       <StatusBar 

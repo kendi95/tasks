@@ -1,14 +1,13 @@
 import { FC } from "react";
 import { TouchableWithoutFeedback } from "react-native";
-import { useTheme } from "styled-components";
 
 import { useGlobal } from "../../hooks/useGlobal";
 
 import { MainHeader } from "../../components/MainHeader";
+import { MainFooter } from "../../components/MainFooter";
 import { Container } from "./styles";
 
 export const Tasks: FC = () => {
-  const { fonts, colors } = useTheme();
   const { 
     onHideMenu, 
     onRetractedSearchInput, 
@@ -32,6 +31,7 @@ export const Tasks: FC = () => {
     >
       <Container>
         <MainHeader />
+        <MainFooter />
       </Container>
     </TouchableWithoutFeedback>
   );

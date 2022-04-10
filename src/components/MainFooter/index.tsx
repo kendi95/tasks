@@ -1,6 +1,8 @@
 import { FC, useEffect, useState } from "react";
 import { useTheme } from "styled-components/native";
+import { StyleSheet } from "react-native";
 
+import { useAnimation } from "../../hooks/useAnimation";
 import { useGlobal } from "../../hooks/useGlobal";
 
 import { 
@@ -17,9 +19,21 @@ export const MainFooter: FC = () => {
     onChangeCurrentScreen,
     currentScreen
   } = useGlobal();
+  const { mainFooterAnimation } = useAnimation();
   const { colors } = useTheme();
 
   const [countRemovedTask, setCountRemovedTask] = useState(0);
+
+  const styles = StyleSheet.create({
+    container: {
+      borderTopColor: colors.primary,
+      borderRightColor: colors.primary,
+      borderLeftColor: colors.primary,
+      borderTopWidth: 3, 
+      borderRightWidth: 0.1,
+      borderLeftWidth: 0.1
+    }
+  });
 
   useEffect(() => {
     setTimeout(() => {
@@ -32,7 +46,7 @@ export const MainFooter: FC = () => {
   }, [])
 
   return (
-    <Container>
+    <Container style={[mainFooterAnimation, styles.container]}>
       <ScreenButton 
         isActive={currentScreen === "Tasks" && true}
         onPress={() => onChangeCurrentScreen("Tasks")}

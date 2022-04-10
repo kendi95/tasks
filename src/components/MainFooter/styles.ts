@@ -2,8 +2,10 @@ import styled from "styled-components/native";
 import { RectButton } from "react-native-gesture-handler";
 import Icon from "@expo/vector-icons/Feather";
 import Animated from "react-native-reanimated";
+import { View } from "react-native";
 
 const AnimatedIcon = Animated.createAnimatedComponent(Icon);
+const AnimatedContainer = Animated.createAnimatedComponent(View);
 
 interface ScreenButtonProps {
   isActive: boolean;
@@ -13,7 +15,7 @@ interface ScreenAnimatedIconProps {
   isActive: boolean;
 }
 
-export const Container = styled.View`
+export const Container = styled(AnimatedContainer)`
   flex-direction: row;
   align-items: center;
   justify-content: space-evenly;

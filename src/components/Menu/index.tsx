@@ -1,4 +1,5 @@
 import { FC, useEffect, useState } from "react";
+import { StyleSheet } from "react-native";
 import { 
   useSharedValue, 
   useAnimatedStyle, 
@@ -15,6 +16,12 @@ import { useGlobal } from "../../hooks/useGlobal";
 
 import { Container, SwitchContainer, SwitchLabel } from "./styles";
 
+const styles = StyleSheet.create({
+  container: {
+    elevation: 8,
+  }
+});
+
 export const Menu: FC = () => {
   const { colors } = useTheme();
   const { onChangeTheme, isDarkMode } = useGlobal();
@@ -22,7 +29,7 @@ export const Menu: FC = () => {
   
 
   return (
-    <Container style={menuAnimation}>
+    <Container style={[styles.container, menuAnimation]}>
       <SwitchContainer style={opacityAnimation}>
         <SwitchLabel>Modo Escuro</SwitchLabel>
         <Switch 
@@ -31,8 +38,8 @@ export const Menu: FC = () => {
           renderActiveText={false}
           renderInActiveText={false}
           disabled={false}
-          circleSize={26}
-          barHeight={24}
+          circleSize={22}
+          barHeight={20}
           circleBorderWidth={3}
           backgroundActive={colors.iconColorSecundary}
           backgroundInactive={colors.primary}

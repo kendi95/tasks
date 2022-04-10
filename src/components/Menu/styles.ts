@@ -5,7 +5,7 @@ export const Container = styled(Animated.View)`
   border-radius: 16px;
 
   position: absolute;
-  right: 24px;
+  right: 16px;
   top: 16px;
 
   flex: 100;
@@ -25,5 +25,5 @@ export const SwitchContainer = styled(Animated.View)`
 export const SwitchLabel = styled.Text`
   color: ${({ theme }) => theme.colors.textColorSecundary};
   font-family: ${({ theme }) => theme.fonts.medium};
-  font-size: 16px;
+  font-size: 14px;
 `;

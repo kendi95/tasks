@@ -8,7 +8,7 @@ import {
   useSharedValue, 
   withTiming
 } from "react-native-reanimated";
-import { useWindowDimensions } from "react-native";
+import { useWindowDimensions, Keyboard } from "react-native";
 
 import { useGlobal } from "../hooks/useGlobal";
 
@@ -32,6 +32,12 @@ interface AnimationContextProps {
     width: number;
     height: number;
   };
+  mainFooterAnimation: {
+    bottom: number;
+  };
+  mainTasksAnimation: {
+    opacity: number;
+  };
 }
 
 export const AnimationContext = createContext({} as AnimationContextProps);
@@ -46,8 +52,37 @@ export const AnimationProvider: FC = ({ children }) => {
   const opacity = useSharedValue(0);
   const settingIcon = useSharedValue(0);
   const settingButton = useSharedValue(1);
-  const widthSearchInput = useSharedValue(width * 0.7);
-  const heightSearchInput = useSharedValue(48);
+  const widthSearchInput = useSharedValue(width * 0.74);
+  const bottomMainFooter = useSharedValue(0);
+  const opacityMainTasks = useSharedValue(1);
+  const borderRadiusSearchInput = useSharedValue(12);
+
+  const borderRadiusSearchStyled = useDerivedValue(() => {
+    return interpolate(
+      borderRadiusSearchInput.value,
+      [12, 24],
+      [12, 24],
+      Extrapolate.CLAMP
+    );
+  });
+
+  const bottomMainFooterStyled = useDerivedValue(() => {
+    return interpolate(
+      bottomMainFooter.value,
+      [0, -72],
+      [0, -72],
+      Extrapolate.CLAMP
+    );
+  });
+
+  const opacityMainTasksStyled = useDerivedValue(() => {
+    return interpolate(
+      opacityMainTasks.value,
+      [1, 0.1],
+      [1, 0.1],
+      Extrapolate.CLAMP
+    );
+  });
 
   const widthMenuStyled = useDerivedValue(() => {
     return interpolate(
@@ -97,25 +132,28 @@ export const AnimationProvider: FC = ({ children }) => {
   const widthSearchInputStyled = useDerivedValue(() => {
     return interpolate(
       widthSearchInput.value,
-      [width * 0.7, width],
-      [width * 0.7, width],
+      [width * 0.74, width],
+      [width * 0.74, width],
       Extrapolate.CLAMP
     );
   });
 
-  const heightSearchInputStyled = useDerivedValue(() => {
-    return interpolate(
-      widthSearchInput.value,
-      [48, 72],
-      [48, 72],
-      Extrapolate.CLAMP
-    );
+  const mainTasksAnimation = useAnimatedStyle(() => {
+    return {
+      opacity: opacityMainTasksStyled.value
+    }
+  });
+
+  const mainFooterAnimation = useAnimatedStyle(() => {
+    return {
+      bottom: bottomMainFooterStyled.value
+    }
   });
 
   const menuAnimation = useAnimatedStyle(() => {
     return {
       width: widthMenuStyled.value,
-      height: heightMenuStyled.value
+      height: heightMenuStyled.value,
     }
   });
 
@@ -145,33 +183,35 @@ export const AnimationProvider: FC = ({ children }) => {
   const searchInputAnimation = useAnimatedStyle(() => {
     return {
       width: widthSearchInputStyled.value,
-      height: 48
+      height: 48,
+      borderRadius: borderRadiusSearchStyled.value
     }
   });
 
   useEffect(() => {
     if (isExpandedInput) {
       settingButton.value = withTiming(0, {
-        duration: 100
+        duration: 50
       }, () => {
-        widthSearchInput.value = withTiming(width * 0.87, {
+        widthSearchInput.value = withTiming(width * 0.92, {
           duration: 100
         });
-        heightSearchInput.value = withTiming(72, {
-          duration: 100
+
+        borderRadiusSearchInput.value = withTiming(24, {
+          duration: 200
         });
       });
-
     } else {
       widthSearchInput.value = withTiming(width * 0.7, {
-        duration: 200
-      });
-      heightSearchInput.value = withTiming(48, {
-        duration: 200
+        duration: 160
       }, () => {
         settingButton.value = withTiming(1, {
           duration: 200
         });
+      });
+
+      borderRadiusSearchInput.value = withTiming(12, {
+        duration: 200
       });
     }
   }, [isExpandedInput]);
@@ -183,41 +223,60 @@ export const AnimationProvider: FC = ({ children }) => {
       }, (finished) => {
         if (finished) {
           widthMenu.value = withTiming(200, {
-            duration: 300,
+            duration: 260,
           });
     
           heightMenu.value = withTiming(300, {
-            duration: 300,
+            duration: 260,
           }, () => {
             opacity.value = withTiming(1, {
               duration: 200
             });
           });
+
+          opacityMainTasks.value = withTiming(0.4, {
+            duration: 50
+          });
         }
       });
-
       
     } else {
+      
       opacity.value = withTiming(0, {
         duration: 50
       }, () => {
         widthMenu.value = withTiming(0, {
-          duration: 200,
+          duration: 260,
         });
   
         heightMenu.value = withTiming(0, {
-          duration: 200,
+          duration: 260,
         }, () => {
           settingIcon.value = withTiming(0, {
             duration: 200,
           });
-
         });
 
+        opacityMainTasks.value = withTiming(1, {
+          duration: 50
+        });
       });
 
     }
   }, [isShowedMenu])
+
+  Keyboard.addListener("keyboardDidHide", () => {
+    Keyboard.dismiss();
+    bottomMainFooter.value = withTiming(0, {
+      duration: 600
+    });
+  });
+
+  Keyboard.addListener("keyboardDidShow", () => {
+    bottomMainFooter.value = withTiming(-72, {
+      duration: 400
+    });
+  });
 
   return (
     <AnimationContext.Provider
@@ -226,7 +285,9 @@ export const AnimationProvider: FC = ({ children }) => {
         opacityAnimation,
         rotateIconAnimation,
         settingButtonAnimation,
-        searchInputAnimation
+        searchInputAnimation,
+        mainFooterAnimation,
+        mainTasksAnimation
       }}
     >
       { children }

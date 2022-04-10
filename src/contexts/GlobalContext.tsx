@@ -1,5 +1,5 @@
 import { createContext, FC, useEffect, useState } from "react";
-import { Keyboard } from "react-native";
+import { BackHandler, Keyboard } from "react-native";
 import { ThemeProvider } from "styled-components/native";
 import { StatusBar } from "expo-status-bar";
 import { setBackgroundColorAsync } from "expo-navigation-bar";

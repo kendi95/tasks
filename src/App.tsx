@@ -5,7 +5,7 @@ import {
   Inter_500Medium,
   Inter_700Bold
 } from "@expo-google-fonts/inter";
-
+import { BackHandler } from 'react-native';
 
 import { GlobalProvider } from "./contexts/GlobalContext";
 import { AnimationProvider } from './contexts/AnimationContext';
@@ -22,6 +22,12 @@ export const App: FC = () => {
   if (!loadedFonts) {
     return <AppLoading />
   }
+
+  BackHandler.addEventListener("hardwareBackPress", () => {
+    BackHandler.exitApp();
+
+    return true;
+  });
 
   return (
     <GlobalProvider>

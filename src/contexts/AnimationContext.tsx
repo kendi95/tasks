@@ -6,7 +6,8 @@ import {
   useAnimatedStyle, 
   useDerivedValue, 
   useSharedValue, 
-  withTiming
+  withTiming,
+  runOnJS
 } from "react-native-reanimated";
 import { useWindowDimensions, Keyboard } from "react-native";
 
@@ -38,6 +39,8 @@ interface AnimationContextProps {
   mainTasksAnimation: {
     opacity: number;
   };
+  onHideMainFooter(callback?: () => void): void;
+  onShowMainFooter(duration?: number, callback?: () => void): void;
 }
 
 export const AnimationContext = createContext({} as AnimationContextProps);
@@ -186,7 +189,28 @@ export const AnimationProvider: FC = ({ children }) => {
       height: 48,
       borderRadius: borderRadiusSearchStyled.value
     }
-  });
+  });runOnJS
+
+  function onHideMainFooter(callback?: () => void) {
+    bottomMainFooter.value = withTiming(-72, {
+      duration: 400
+    }, (finished) => {
+      if (callback && finished) {
+        runOnJS(callback)();
+      }
+    });
+
+  }
+
+  function onShowMainFooter(duration: number = 600, callback?: () => void) {
+    bottomMainFooter.value = withTiming(0, {
+      duration: duration
+    }, (finished) => {
+      if (callback && finished) {
+        runOnJS(callback)();
+      }
+    });
+  }
 
   useEffect(() => {
     if (isExpandedInput) {
@@ -267,15 +291,11 @@ export const AnimationProvider: FC = ({ children }) => {
 
   Keyboard.addListener("keyboardDidHide", () => {
     Keyboard.dismiss();
-    bottomMainFooter.value = withTiming(0, {
-      duration: 600
-    });
+    onShowMainFooter();
   });
 
   Keyboard.addListener("keyboardDidShow", () => {
-    bottomMainFooter.value = withTiming(-72, {
-      duration: 400
-    });
+    onHideMainFooter();
   });
 
   return (
@@ -287,7 +307,9 @@ export const AnimationProvider: FC = ({ children }) => {
         settingButtonAnimation,
         searchInputAnimation,
         mainFooterAnimation,
-        mainTasksAnimation
+        mainTasksAnimation,
+        onHideMainFooter,
+        onShowMainFooter
       }}
     >
       { children }

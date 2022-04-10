@@ -3,6 +3,7 @@ import { RectButton } from "react-native-gesture-handler";
 import Icon from "@expo/vector-icons/Feather";
 import Animated from "react-native-reanimated";
 import { View } from "react-native";
+import { RFValue } from "react-native-responsive-fontsize";
 
 const AnimatedIcon = Animated.createAnimatedComponent(Icon);
 const AnimatedContainer = Animated.createAnimatedComponent(View);
@@ -26,15 +27,15 @@ export const Container = styled(AnimatedContainer)`
   bottom: 0;
   left: 0;
   right: 0;
-  height: 72px;
-  border-top-left-radius: 16px;
-  border-top-right-radius: 16px;
+  height: ${RFValue(72)}px;
+  border-top-left-radius: ${RFValue(16)}px;
+  border-top-right-radius: ${RFValue(16)}px;
 `;
 
 export const ScreenButton = styled(RectButton)<ScreenButtonProps>`
-  width: 64px;
-  height: 48px;
-  border-radius: 24px;
+  width: ${RFValue(64)}px;
+  height: ${RFValue(48)}px;
+  border-radius: ${RFValue(24)}px;
 
   align-items: center;
   justify-content: center;
@@ -51,13 +52,13 @@ export const ScrennAnimatedIcon = styled(AnimatedIcon)<ScreenAnimatedIconProps>`
 
 export const ScreenBadge = styled.View`
   background: ${({ theme }) => theme.colors.error};
-  width: 16px;
-  height: 16px;
-  border-radius: 8px;
+  width: ${RFValue(16)}px;
+  height: ${RFValue(16)}px;
+  border-radius: ${RFValue(8)}px;
 
   position: absolute;
-  right: 10px;
-  top: 4px;
+  right: ${RFValue(10)}px;
+  top: ${RFValue(4)}px;
   
   align-items: center;
   justify-content: center;
@@ -65,6 +66,6 @@ export const ScreenBadge = styled.View`
 
 export const ScreenBadgeText = styled.Text`
   font-family: ${({ theme }) => theme.fonts.bold};
-  font-size: 10px;
+  font-size: ${RFValue(10)}px;
   color: ${({ theme }) => theme.colors.textColorPrimary};
 `;

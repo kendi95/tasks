@@ -1,5 +1,5 @@
-import { createContext, FC, useEffect, useState } from "react";
-import { BackHandler, Keyboard } from "react-native";
+import { createContext, FC, useState } from "react";
+import { Keyboard } from "react-native";
 import { ThemeProvider } from "styled-components/native";
 import { StatusBar } from "expo-status-bar";
 import { setBackgroundColorAsync } from "expo-navigation-bar";
@@ -18,7 +18,7 @@ interface IGlobalContextProps {
   onExpandedSearchInput(): void;
   onRetractedSearchInput(): void;
   changeBackgroundColorNavigation(color: string): Promise<void>;
-  onChangeCurrentScreen(screen: ICurrentScreen): void;
+  onChangeCurrentScreen(screen: ICurrentScreen, callback?: () => Promise<void>): void;
 }
 
 type ICurrentScreen = "Tasks" | "Trash" | "Favorit";
@@ -52,8 +52,12 @@ export const GlobalProvider: FC = ({ children }) => {
     setIsExpandedInput(false);
   }
 
-  function onChangeCurrentScreen(screen: ICurrentScreen) {
+  function onChangeCurrentScreen(screen: ICurrentScreen, callback?: () => Promise<void>) {
     setCurrentScreen(screen);
+
+    if (callback) {
+      callback();
+    }
   }
 
   async function changeBackgroundColorNavigation(color: string = "#3C3939") {

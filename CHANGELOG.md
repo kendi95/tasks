@@ -1,3 +1,7 @@
+### 0.3.0
+- [x] Create new screen: **Trash**.
+- [x] Fixed animated component when navigate to another screen: **Main Footer**.
+
 ### 0.2.1
 - [x] Fixed some animated components: **Main Footer**, **Main Header**, **Menu**.
 - [x] Fixed animated screen: **Tasks**.

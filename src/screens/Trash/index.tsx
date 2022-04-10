@@ -8,13 +8,12 @@ import { MainHeader } from "../../components/MainHeader";
 import { MainFooter } from "../../components/MainFooter";
 import { Container, Main, Task, Title } from "./styles";
 
-export const Tasks: FC = () => {
+export const Trash: FC = () => {
   const { 
     onHideMenu, 
     onRetractedSearchInput, 
     isShowedMenu, 
-    isExpandedInput,
-    currentScreen
+    isExpandedInput
   } = useGlobal();
   const { mainTasksAnimation, onShowMainFooter } = useAnimation();
 
@@ -27,12 +26,9 @@ export const Tasks: FC = () => {
       onRetractedSearchInput();
     }
   }
-
   useEffect(() => {
-    if (currentScreen === "Tasks") {
-      onShowMainFooter(800);
-    }
-  }, [currentScreen]);
+    onShowMainFooter();
+  }, []);
 
   return (
     <TouchableWithoutFeedback
@@ -41,7 +37,7 @@ export const Tasks: FC = () => {
       <Container>
         <MainHeader />
 
-        <Title>Minhas tarefas</Title>
+        <Title>Lixeira</Title>
 
         <Main style={mainTasksAnimation}>
           <Task enabled={!isShowedMenu}/>

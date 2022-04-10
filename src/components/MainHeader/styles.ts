@@ -2,6 +2,7 @@ import styled from "styled-components/native";
 import Animated from "react-native-reanimated";
 import Icon from "@expo/vector-icons/Feather";
 import { Dimensions, TextInput } from "react-native";
+import { RFValue } from "react-native-responsive-fontsize";
 
 const { width } = Dimensions.get("window");
 
@@ -13,19 +14,19 @@ export const Container = styled.View`
   align-items: center;
   justify-content: space-between;
 
-  height: 80px;
-  padding: 0 16px;
-  margin-top: 32px;
+  height: ${RFValue(80)}px;
+  padding: 0 ${RFValue(16)}px;
+  margin-top: ${RFValue(32)}px;
   background: transparent;
 `;
 
 export const InputSearch = styled(AnimatedInputSearch)`
-  height: 56px;
-  width: ${width * 0.7}px;
-  border-radius: 12px;
+  height: ${RFValue(56)}px;
+  width: ${RFValue(width * 0.7)}px;
+  border-radius: ${RFValue(12)}px;
   background: ${({ theme }) => theme.colors.secundary};
-  padding: 12px 16px;
+  padding: ${RFValue(12)}px ${RFValue(16)}px;
   font-family: ${({ theme }) => theme.fonts.medium};
-  font-size: 14px;
+  font-size: ${RFValue(14)}px;
   color: ${({ theme }) => theme.colors.textColorPrimary};
 `;
